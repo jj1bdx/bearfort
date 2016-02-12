@@ -125,11 +125,8 @@ uint16_t adc_read(uint8_t adcx) {
 
     ADMUX &= 0xf0;
     ADMUX |= adcx;
-    /* wait 500us to measure internal VBG */
-    /* See <http://www.sciencetronics.com/greenphotons/?p=1521> */
-    if (adcx == 14) {
-        _delay_us(500);
-    }
+    /* XXX: Wait 500us here to measure internal VBG */
+    /* (Removed from this code for speedup */
     ADCSRA |= _BV(ADSC);
     while ( (ADCSRA & _BV(ADSC)) );
     return ADC;
@@ -144,16 +141,14 @@ int main() {
     stdin = &uart_str;
     stdout = &uart_str;
 
-    uint16_t a0, a1, a2, a3, a4, temp, vbg, gnd;
+    uint16_t a0, a1, a2, a3;
     for (;;) {
         a0 = adc_read(0);
         a1 = adc_read(1);
         a2 = adc_read(2);
         a3 = adc_read(3);
-        temp = adc_read(8);
-        vbg = adc_read(14);
-        fprintf(stdout, "{ %d, %d, %d, %d, %d, %d } \n",
-                a0, a1, a2, a3, temp, vbg);
+        fprintf(stdout, "{ %d, %d, %d, %d } \n",
+                a0, a1, a2, a3);
     }
     /* NOTREACHED */
     return 0;
