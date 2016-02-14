@@ -126,7 +126,7 @@ uint16_t adc_read(uint8_t adcx) {
     ADMUX &= 0xf0;
     ADMUX |= adcx;
     /* XXX: Wait 500us here to measure internal VBG */
-    /* (Removed from this code for speedup */
+    _delay_us(500.0);
     ADCSRA |= _BV(ADSC);
     while ( (ADCSRA & _BV(ADSC)) );
     return ADC;
@@ -143,6 +143,7 @@ int main() {
 
     uint16_t a0, a1, a2, a3;
     for (;;) {
+        _delay_ms(90.0);
         a0 = adc_read(0);
         a1 = adc_read(1);
         a2 = adc_read(2);
