@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -O3 -g -DF_CPU=16000000UL
+CFLAGS += -Wall -O0 -g -DF_CPU=16000000UL -std=c99
 CFLAGS += -MD -MP -MT $(*F).o -MF $(@F).d 
 
 ## Linker flags
@@ -30,7 +30,7 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Objects that must be built in order to link
-OBJECTS = bearfort-arduino.o uart.o
+OBJECTS = bearfort-arduino.o uart.o i2c_master.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 

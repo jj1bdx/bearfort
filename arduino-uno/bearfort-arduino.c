@@ -44,6 +44,14 @@
 
 FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 
+/* I2C library */
+
+#include <util/twi.h>
+#include "i2c_master.h"
+
+#define ADT7410_WRITE 0x90
+#define ADT7410_READ 0x91
+
 /* initialize IO ports */
 static void ioinit(void) {
 
@@ -113,9 +121,13 @@ static void ioinit(void) {
     ADMUX = 0xC0;
     ACSR = 0x80;
     /* Enable ADC0 to ADC3 */
-    DIDR0 = 0x3f;
+    DIDR0 = 0x0f;
 
     ADCSRA |= _BV(ADEN);
+
+    /* initialize I2C */
+    i2c_init();
+    init_ADT7410();
 
     /* enable interrupt after initialization*/
     sei();
@@ -132,6 +144,33 @@ uint16_t adc_read(uint8_t adcx) {
     return ADC;
 }
 
+void init_ADT7410(void){
+
+    i2c_start(ADT7410_WRITE);
+    i2c_write(0x03);
+    i2c_write(0x80); // 15-bit precision mode
+    i2c_stop();
+
+}
+
+uint16_t get_ADT7410(void){
+
+	uint16_t temp;
+
+    i2c_start(ADT7410_WRITE);
+    i2c_write(0x00); // temperature register
+    i2c_stop();
+
+    i2c_start(ADT7410_READ);
+
+    temp = ((uint8_t)i2c_read_ack() << 8);
+    temp |= ((uint8_t)i2c_read_nack());
+
+    i2c_stop();
+
+    return temp;
+}
+
 /* main function */
 
 int main() {
@@ -141,15 +180,16 @@ int main() {
     stdin = &uart_str;
     stdout = &uart_str;
 
-    uint16_t a0, a1, a2, a3;
+    uint16_t adt0, a0, a1, a2, a3;
     for (;;) {
         _delay_ms(90.0);
+        adt0 = get_ADT7410();
         a0 = adc_read(0);
         a1 = adc_read(1);
         a2 = adc_read(2);
         a3 = adc_read(3);
-        fprintf(stdout, "{ %d, %d, %d, %d } \n",
-                a0, a1, a2, a3);
+        fprintf(stdout, "{ %d, %d, %d, %d, %d } \n",
+                adt0, a0, a1, a2, a3);
     }
     /* NOTREACHED */
     return 0;
