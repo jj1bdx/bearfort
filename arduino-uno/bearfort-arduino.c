@@ -52,6 +52,14 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 #define ADT7410_WRITE 0x90
 #define ADT7410_READ 0x91
 
+/* temperature macros */
+
+#define TC1 ((double)1.065) // 1.090/1023*1000
+#define LM60TEMP(x) ((((double)x) * TC1 - 424.0) / 6.25)
+#define ADTTEMP(x) (((double)((int16_t)x)) / (double)128.0)
+
+char buffer[8];
+
 /* initialize IO ports */
 static void ioinit(void) {
 
@@ -127,7 +135,11 @@ static void ioinit(void) {
 
     /* initialize I2C */
     i2c_init();
-    init_ADT7410();
+    /* initialize ADT7410 */
+    i2c_start(ADT7410_WRITE);
+    i2c_write(0x03);
+    i2c_write(0x80); // 15-bit precision mode
+    i2c_stop();
 
     /* enable interrupt after initialization*/
     sei();
@@ -142,15 +154,6 @@ uint16_t adc_read(uint8_t adcx) {
     ADCSRA |= _BV(ADSC);
     while ( (ADCSRA & _BV(ADSC)) );
     return ADC;
-}
-
-void init_ADT7410(void){
-
-    i2c_start(ADT7410_WRITE);
-    i2c_write(0x03);
-    i2c_write(0x80); // 15-bit precision mode
-    i2c_stop();
-
 }
 
 uint16_t get_ADT7410(void){
@@ -180,16 +183,33 @@ int main() {
     stdin = &uart_str;
     stdout = &uart_str;
 
-    uint16_t adt0, a0, a1, a2, a3;
+    double adt0, a0, a1, a2, a3;
     for (;;) {
         _delay_ms(90.0);
-        adt0 = get_ADT7410();
-        a0 = adc_read(0);
-        a1 = adc_read(1);
-        a2 = adc_read(2);
-        a3 = adc_read(3);
-        fprintf(stdout, "{ %d, %d, %d, %d, %d } \n",
-                adt0, a0, a1, a2, a3);
+        adt0 = ADTTEMP(get_ADT7410());
+        a0 = LM60TEMP(adc_read(0));
+        a1 = LM60TEMP(adc_read(1));
+        a2 = LM60TEMP(adc_read(2));
+        a3 = LM60TEMP(adc_read(3));
+        // fprintf(stdout, "{ %7.2f, %3.2f, %3.2f, %3.2f, %3.2f } \n",
+        //        adt0, a0, a1, a2, a3);
+        fputs("{ ", stdout);
+        dtostrf(adt0, 6, 2, buffer);
+        fputs(buffer, stdout);
+        fputs(", ", stdout);
+        dtostrf(a0, 6, 2, buffer);
+        fputs(buffer, stdout);
+        fputs(", ", stdout);
+        dtostrf(a1, 6, 2, buffer);
+        fputs(buffer, stdout);
+        fputs(", ", stdout);
+        dtostrf(a2, 6, 2, buffer);
+        fputs(buffer, stdout);
+        fputs(", ", stdout);
+        dtostrf(a3, 6, 2, buffer);
+        fputs(buffer, stdout);
+        fputs("}.\n", stdout);
+        fflush(stdout);
     }
     /* NOTREACHED */
     return 0;
