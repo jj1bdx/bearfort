@@ -152,7 +152,7 @@ uint16_t adc_read(uint8_t adcx) {
     ADMUX &= 0xf0;
     ADMUX |= adcx;
     /* XXX: Wait 500us here to measure internal VBG */
-    _delay_us(500.0);
+    /* _delay_us(500.0); */
     ADCSRA |= _BV(ADSC);
     while ( (ADCSRA & _BV(ADSC)) );
     return ADC;
