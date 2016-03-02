@@ -186,30 +186,33 @@ int main() {
     stdin = &uart_str;
     stdout = &uart_str;
 
-    double adt0, a0, a1, a2, a3;
+    int16_t adt0, a0, a1, a2, a3;
+    int ch;
+
     for (;;) {
-        _delay_ms(90.0);
-        adt0 = ADTTEMP(get_ADT7410());
-        a0 = LM60TEMP(adc_read(0));
-        a1 = LM60TEMP(adc_read(1));
-        a2 = LM60TEMP(adc_read(2));
-        a3 = LM60TEMP(adc_read(3));
-        // fprintf(stdout, "{ %7.2f, %3.2f, %3.2f, %3.2f, %3.2f } \n",
-        //        adt0, a0, a1, a2, a3);
+        ch = getchar();
+
+        adt0 = (int16_t)get_ADT7410();
+        a0 = adc_read(0);
+        a1 = adc_read(1);
+        a2 = adc_read(2);
+        a3 = adc_read(3);
+
         fputs("{ ", stdout);
-        dtostrf(adt0, 6, 2, buffer);
+        itoa(adt0, buffer, 10);
         fputs(buffer, stdout);
         fputs(", ", stdout);
-        dtostrf(a0, 6, 2, buffer);
+        itoa(a0, buffer, 10);
         fputs(buffer, stdout);
         fputs(", ", stdout);
+        itoa(a1, buffer, 10);
         dtostrf(a1, 6, 2, buffer);
         fputs(buffer, stdout);
         fputs(", ", stdout);
-        dtostrf(a2, 6, 2, buffer);
+        itoa(a2, buffer, 10);
         fputs(buffer, stdout);
         fputs(", ", stdout);
-        dtostrf(a3, 6, 2, buffer);
+        itoa(a3, buffer, 10);
         fputs(buffer, stdout);
         fputs("}.\n", stdout);
         fflush(stdout);
