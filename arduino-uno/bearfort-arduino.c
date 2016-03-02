@@ -160,7 +160,7 @@ uint16_t adc_read(uint8_t adcx) {
 
 uint16_t get_ADT7410(void){
 
-	uint16_t temp;
+	uint16_t temp = 0x8000;
     
     // temperature register
     if(!i2c_start(ADT7410_WRITE) &&
