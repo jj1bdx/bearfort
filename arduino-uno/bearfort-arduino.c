@@ -136,10 +136,12 @@ static void ioinit(void) {
     /* initialize I2C */
     i2c_init();
     /* initialize ADT7410 */
-    i2c_start(ADT7410_WRITE);
-    i2c_write(0x03);
-    i2c_write(0x80); // 15-bit precision mode
-    i2c_stop();
+    if(!i2c_start(ADT7410_WRITE) &&
+       !i2c_write(0x03) &&
+       // 15-bit precision mode
+       !i2c_write(0x80)) {
+        i2c_stop();
+    }
 
     /* enable interrupt after initialization*/
     sei();
@@ -159,17 +161,18 @@ uint16_t adc_read(uint8_t adcx) {
 uint16_t get_ADT7410(void){
 
 	uint16_t temp;
+    
+    // temperature register
+    if(!i2c_start(ADT7410_WRITE) &&
+       !i2c_write(0x00)) {
+        i2c_stop();
+    }
 
-    i2c_start(ADT7410_WRITE);
-    i2c_write(0x00); // temperature register
-    i2c_stop();
-
-    i2c_start(ADT7410_READ);
-
-    temp = ((uint8_t)i2c_read_ack() << 8);
-    temp |= ((uint8_t)i2c_read_nack());
-
-    i2c_stop();
+    if(!i2c_start(ADT7410_READ)) {
+        temp = ((uint8_t)i2c_read_ack() << 8);
+        temp |= ((uint8_t)i2c_read_nack());
+        i2c_stop();
+    }
 
     return temp;
 }
