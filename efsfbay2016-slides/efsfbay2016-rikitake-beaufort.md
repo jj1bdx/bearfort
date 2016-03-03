@@ -46,35 +46,49 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 * Bearfort system design
 * Sensor and 8-bit Arduino basics
+* Software development on Arduino
 * Mounting redundant sensors on Arduino
 * Protocols on the wire
-* Software development on Arduino
 * How Erlang talks with Arduino
 * Functional abstraction with Erlang
 
 ---
 
-# Bearfort system diagram
+# Bearfort[^1] system diagram
 
-* (Internet-BEAM-Arduino-Sensors)
-* (Bearfort: BEam, ARduino, FORTified)
-* (Bearfort ridge, NJ, USA)
+* (diagram of Internet-BEAM-Arduino-Sensors)
+
+[^1]: Bearfort = {BEam, ARduino, FORTified} / Bearfort ridge, NJ, USA
 
 ---
 
 # Arduino Uno R3
 
-* ATmel AVR ATmega328P
+* Atmel AVR ATmega328P
 * 16MHz clock
-* 32K Flash, 2K RAM, 1K EEPROM
-* 5V powered by USB or external power supply (7~12V)
+* 32K Flash (program only)
+* 2K RAM, 1K EEPROM
+* Powered by USB (5V) or external power supply (7~12V)
 * 4 Analog Input + I2C + SPI
-* USB HID I/F by ATmega16U2
+* USB Serial I/F by ATmega16U2
 * USD24.95[^1] as of March 2016
 
 [^1]: Photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arduino_Uno_006.jpg), License: CC-BY-SA-2.0
 
 ![right,fit](Arduino_Uno_006.jpg)
+
+---
+
+# Software development on Arduino
+
+* Easy way: Arduino IDE (not in this talk)
+* More pragmatic way: 8bit AVR dev tools
+  * [avr-libc](http://savannah.nongnu.org/projects/avr-libc/), avr-binutils, avr-gcc
+* Program loader: [avrdude](http://savannah.nongnu.org/projects/avrdude)
+* Boot loader: [optiboot](https://github.com/optiboot/optiboot/) 
+  * [My fork for EEPROM read/write](https://github.com/jj1bdx/optiboot/)
+* In-circuit debuggers/chip programmers: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), STK500, AVRISP mkII
+
 
 ---
 
