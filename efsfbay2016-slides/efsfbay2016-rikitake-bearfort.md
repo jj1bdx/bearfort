@@ -28,7 +28,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 * IoT is a buzzword: *back to basics*
 * Designing fault-tolerant systems is *hard*: a practical way is giving more redundancy
-* Devices/components *fail*
+* Devices/components *fail*: prepare
 * Abstraction in Erlang helps a lot
 
 ---
