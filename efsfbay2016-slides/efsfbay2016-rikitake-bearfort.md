@@ -138,7 +138,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
    * $$T$$[°C]$$ = (V_o$$[mV]$$ - 424)/6.25$$
    * Accuracy: $$\pm{}3$$[°C]
 * ADT7410: -55°C to +125°C, SOIC (smaller)
-   * $$T$$[°C]$$ = 0.0625\times{}X$$ ($$X$$: output value)
+   * $$T$$[°C]$$ = 0.0625\times{}X$$ ($$X$$: 13-bit output)
    * Accuracy: $$\pm{}1$$[°C]
 * Calibration required
 
