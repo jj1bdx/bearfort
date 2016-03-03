@@ -120,6 +120,19 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ---
 
+# Temperature sensor characteristics
+
+* Thermal time constant is large
+   * Takes 60~100 seconds to stabilize
+* LM60: -40°C to +125°C, TO-92 package
+   * $$T$$[°C]$$ = (V_o$$[mV]$$ - 424)/6.25$$
+   * Accuracy: $$\pm{}3$$[°C]
+* ADT7410: -55°C to +125°C, SOIC (smaller)
+   * $$T$$[°C]$$ = 0.0625\times{}X$$ ($$X$$: output value)
+   * Accuracy: $$\pm{}1$$[°C]
+
+---
+
 # Future directions and issues
 
 * Field test in the outdoor environment
