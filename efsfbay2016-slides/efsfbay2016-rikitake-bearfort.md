@@ -48,7 +48,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 * Bearfort system design
 * Sensor and 8-bit Arduino basics
 * Mounting redundant sensors on Arduino
-* Protocols on the wire
+* Wire protocols
 * How Erlang talks with Arduino
 * Functional abstraction with Erlang
 
@@ -109,6 +109,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 # Bearfort sensor shield
 
+* Arduino add-on board
 * Five temperature sensors
 * Four TI LM60s on ATmega328p ADC0-3
     * Output fault protection (100kohm to GND)
@@ -120,25 +121,88 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ---
 
+# What Bearfort shield can do
+
+* Measuring (ambient) temperature
+* Device/Arduino-level fault tolerance
+   * Redundancy of five sensors
+* Controllable via ATmega328p
+* Can be updated via avrdude through USB
+
+---
+
 # Temperature sensor characteristics
 
-* Thermal time constant is large
-   * Takes 60~100 seconds to stabilize
+* Thermal time constant: 60~100 seconds
 * LM60: -40°C to +125°C, TO-92 package
    * $$T$$[°C]$$ = (V_o$$[mV]$$ - 424)/6.25$$
    * Accuracy: $$\pm{}3$$[°C]
 * ADT7410: -55°C to +125°C, SOIC (smaller)
    * $$T$$[°C]$$ = 0.0625\times{}X$$ ($$X$$: output value)
    * Accuracy: $$\pm{}1$$[°C]
+* Calibration required
+
+---
+
+# How sensors fail
+
+* Open circuit (contact failure, output disruption)
+   * Affects LM60s (Arduino ADCs)
+* Short circuit (communication disruption)
+   * Affects ADT7410 (Arduino I2C/TWI)
+   * I2C clock disrupted and device hangs
+
+---
+
+# Failure mode model for open circuit
+
+(Diagram here)
+
+---
+
+# Wire protocols(1): sensors - Arduino
+
+* LM60: analog voltage
+   * 0.17~1.2V
+   * ATmega328P ADC: 0~1.1V
+* ADT7410: I2C
+   * Two wires: clock and data
+   * Polled from ATmega328p (master)
+   * Slow but sufficient (100kHz clock)
+
+---
+
+# Wire protocols(2): Arduino - host
+
+* Arduino: USB Generic HID
+   * Serial device
+   * 115200bps for avrdude
+   * 9600bps is sufficient for Bearfort
+* Polling from host > broadcasting to host
+   * 10 times/second is sufficient
+   * Listening to USB consumes host CPU power
+   * Requestint data on demand consumes less power
 
 ---
 
 # Future directions and issues
 
-* Field test in the outdoor environment
-* 
-* 
+* Field testing in the outdoor environment
+* Testing with small Erlang/OTP computers
+* Recovering from USB failure is the hardest part, which cannot be solely conducted by Erlang/OTP without OS facility
 
 ---
 
-# Thanks<br><br>Questions?
+# Related work
+
+* [Omer Kiric's talk on EF SF Bay 2013](http://www.erlang-factory.com/conference/ErlangUserConference2013/speakers/OmerKilic)
+   * [Erlang/ALE on GitHub](https://github.com/esl/erlang_ale)
+* [Frank Hunleth's talk on EF SF Bay 2015](http://www.erlang-factory.com/sfbay2015/frank-hunleth)
+   * Embedded Elixir with Erlang/OTP and making a robot called *sumobot*
+   * [elixirbot on GitHub](https://github.com/fhunleth/elixirbot)
+
+---
+
+# [fit] Thanks
+
+# [fit] Questions?
