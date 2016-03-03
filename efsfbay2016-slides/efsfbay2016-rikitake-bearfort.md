@@ -71,9 +71,9 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 * Powered by USB (5V) or external power supply (7~12V)
 * 4 Analog Input + I2C + SPI
 * USB Serial I/F by ATmega16U2
-* USD24.95[^1] as of March 2016
+* USD24.95[^2] as of March 2016
 
-[^1]: Photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arduino_Uno_006.jpg), License: CC-BY-SA-2.0
+[^2]: Photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arduino_Uno_006.jpg), License: CC-BY-SA-2.0
 
 ![right,fit](Arduino_Uno_006.jpg)
 
@@ -92,7 +92,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ---
 
-# AVR chip programmers[^1]
+# AVR chip programmers[^3]
 
 * Controllable from avrdude
 * Chip diagnostics
@@ -103,7 +103,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ![right,fit](avrdragon-20080108-ppcable2.jpg)
 
-[^1]: Photo: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, by Kenji Rikitake, circa January 2008
+[^3]: Photo: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, by Kenji Rikitake, circa January 2008
 
 ---
 
