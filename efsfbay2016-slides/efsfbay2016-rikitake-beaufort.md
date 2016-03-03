@@ -47,7 +47,6 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 * Bearfort system design
 * Sensor and 8-bit Arduino basics
-* Software development on Arduino
 * Mounting redundant sensors on Arduino
 * Protocols on the wire
 * How Erlang talks with Arduino
@@ -105,6 +104,19 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 ![right,fit](avrdragon-20080108-ppcable2.jpg)
 
 [^1]: Photo: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, by Kenji Rikitake, circa January 2008
+
+---
+
+# Bearfort sensor shield
+
+* Five temperature sensors
+* Four TI LM60s on ATmega328p ADC0-3
+    * Output fault protection (100kohm to GND)
+* One Analog Devices ADT7410 on ATmega328p TWI(I2C)
+* All sensors are 5V powered
+* All sensors are replaceable
+
+![right,fit](bearfort-sensor-v2.jpg)
 
 ---
 
