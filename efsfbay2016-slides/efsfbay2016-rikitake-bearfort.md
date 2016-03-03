@@ -111,9 +111,9 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 * Arduino add-on board
 * Five temperature sensors
-* Four Texas Instruments LM60s on ATmega328p ADC0-3
+* Four Texas Instruments LM60s on ADC0-3
     * Output fault protection (100kohm to GND)
-* One Analog Devices ADT7410 on ATmega328p TWI(I2C)
+* One Analog Devices ADT7410 on TWI/I2C
 * All sensors are 5V powered
 * All sensors are replaceable
 
