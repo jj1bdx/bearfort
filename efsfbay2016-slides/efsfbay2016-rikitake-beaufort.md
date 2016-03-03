@@ -92,6 +92,21 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ---
 
+# AVR chip programmers[^1]
+
+* Controllable from avrdude
+* Chip diagnostics
+* High-voltage parallel programming
+* Required to write boot loaders
+* Required to write fuse bits
+* Other hardware debugging
+
+![right,fit](avrdragon-20080108-ppcable2.jpg)
+
+[^1]: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, Photo by Kenji Rikitake, circa January 2008
+
+---
+
 # Future directions and issues
 
 * Field test in the outdoor environment
