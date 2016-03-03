@@ -1,7 +1,8 @@
 footer: Kenji Rikitake / Erlang Factory SF Bay 2016
 slidenumbers: true
 
-# Fault-tolerant Sensor Nodes with Erlang/OTP and Arduino 
+# [fit] Fault-tolerant Sensor Nodes
+# [fit] with Erlang/OTP and Arduino 
 
 <!-- Use Deckset 1.6.0, Zurich theme, 16:9 aspect ratio -->
 <!-- target: 30 slides -->
@@ -32,7 +33,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ---
 
-# NOT in this talk (= ask other people)
+# NOT in this talk
 
 * Protocols over TCP/IP: MQTT, CoAP
 * Cryptographic security
@@ -103,7 +104,7 @@ Erlang Factory SF Bay 2010-2016 speaker (for *seven* consecutive years!)
 
 ![right,fit](avrdragon-20080108-ppcable2.jpg)
 
-[^1]: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, Photo by Kenji Rikitake, circa January 2008
+[^1]: Photo: AVR Dragon configured for ATmega168/328p with a zero-pressure DIP socket, by Kenji Rikitake, circa January 2008
 
 ---
 
