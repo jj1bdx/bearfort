@@ -186,11 +186,26 @@ All sensors are replaceable
 
 ---
 
-# Wire protocol
+# Wire protocol message format
 
-* (diagram of sensor output format)
-* (Use Erlang pattern matching)
-* (source code?)
+## 16-byte fixed length
+
+![inline](bearfort-message-format.jpg)
+
+---
+
+# Wire protocol in Erlang
+
+```erlang
+{ok, <<2, 16#51, 16#82,  % 2 == STX
+ DevId:2/little-unsigned-integer-unit:8,
+ ADT0:2/little-signed-integer-unit:8,
+ A0:2/little-unsigned-integer-unit:8,
+ A1:2/little-unsigned-integer-unit:8,
+ A2:2/little-unsigned-integer-unit:8,
+ A3:2/little-unsigned-integer-unit:8,
+ 3>>} = read_serial(FD). % 3 == ETX
+```
 
 ---
 
@@ -214,9 +229,6 @@ All sensors are replaceable
 # Update example
 
 ```erlang
--module(bearfort_update).
--export([update/0]).
-
 update() ->
     Hex = stk500:hex_file(
           "./arduino-uno/bearfort-arduino.hex"),
@@ -279,7 +291,7 @@ update() ->
 
 ## Michael Santos
 ## Erlang Solutions
-## and you audience!
+## ...and you all!
 
 ---
 
