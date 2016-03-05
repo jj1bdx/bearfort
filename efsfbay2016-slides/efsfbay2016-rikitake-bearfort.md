@@ -71,7 +71,7 @@ Price: USD24.95[^2] as of March 2016 at SparkFun Electronics
 ## Write C(++) and assembler
 ## Event loop
 ## Try and error
-## Interrupts mostly for timer only
+## Interrupts: timer only
 
 ---
 
@@ -131,7 +131,7 @@ All sensors are replaceable
 
 ---
 
-# LM60 open circuit failure example
+# LM60 open circuit failure
 
 ![inline](lm60-open-circuit.jpg)
 
