@@ -178,11 +178,11 @@ All sensors are replaceable
 
 ---
 
-# Serial line control from Erlang
+# Serial line control from Erlang/OTP
 
-* Michael Santos' [srly](https://github.com/msantos/srly) package
-* Capable to control all tty lines and principles via OS ioctl()
-* Fixed-length reading function is *extremely* useful
+## Michael Santos' [srly](https://github.com/msantos/srly) package
+## [fit] Control tty line principles with ioctl()
+## Fixed-length reading function is *extremely* useful
 
 ---
 
