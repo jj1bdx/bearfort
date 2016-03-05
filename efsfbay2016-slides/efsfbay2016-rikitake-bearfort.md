@@ -41,11 +41,14 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 
 ---
 
+![](bearfort-mountain.jpg)
+
 # Bearfort[^1] system diagram
 
-* (diagram of Internet-BEAM-Arduino-Sensors)
+![inline](bearfort-diagram.jpg)
 
-[^1]: Bearfort = {BEam, ARduino, FORTified} / Bearfort ridge, NJ, USA
+
+[^1]: Bearfort = {BEam, ARduino, FORTified} / Bearfort ridge, NJ, USA / Background photo: By Zeete - Own work, CC BY-SA 4.0, <https://commons.wikimedia.org/w/index.php?curid=38798143>
 
 ---
 
@@ -57,7 +60,7 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 
 Price: USD24.95[^2] as of March 2016 at SparkFun Electronics
 
-[^2]: Photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arduino_Uno_006.jpg), License: CC-BY-SA-2.0 
+[^2]: Photo: [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arduino_Uno_006.jpg), By oomlout - ARDU-UNO-03-Front, CC BY-SA 2.0, <https://commons.wikimedia.org/w/index.php?curid=40551883>
 
 ![right,fit](Arduino_Uno_006.jpg)
 
