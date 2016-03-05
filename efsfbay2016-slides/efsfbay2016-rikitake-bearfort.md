@@ -171,7 +171,17 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 # Resetting Arduino from USB
 
-* (diagram of reset sequence)
+## [fit] Turn off DTR/RTS for 50msec and turn back on
+
+```erlang
+%%% Using Michael Santos'
+%%% stk500 and srly repository code
+{ok,FD} = serctl:open("/dev/cu.usbmodem1D11311"),
+[begin dtrrts(FD, Status),
+    timer:sleep(50) end || Status <- [off, on] ].
+```
+
+## Yes, that's it!
 
 ---
 
