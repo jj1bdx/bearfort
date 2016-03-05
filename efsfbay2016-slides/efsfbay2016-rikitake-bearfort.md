@@ -124,15 +124,13 @@ All sensors are replaceable
 
 # Open circuit
 
-* (diagram of open circuit example)
-* (contact failure, output disruption)
+![inline](open-circuit-failure.jpg)
 
 ---
 
 # Short circuit
 
-* (diagram of short circuit example)
-* (I2C communication disruption)
+![inline](short-circuit-failure.jpg)
 
 ---
 
