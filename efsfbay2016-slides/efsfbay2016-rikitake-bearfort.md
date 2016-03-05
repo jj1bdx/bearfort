@@ -128,6 +128,12 @@ All sensors are replaceable
 
 ---
 
+# LM60 open circuit failure example
+
+![inline](lm60-open-circuit.jpg)
+
+---
+
 # Short circuit
 
 ![inline](short-circuit-failure.jpg)
