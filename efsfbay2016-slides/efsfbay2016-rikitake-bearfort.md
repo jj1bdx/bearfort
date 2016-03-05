@@ -100,7 +100,7 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ## Solder - do not use breadboards
 ## Prepare for contact failures
-## KISS - "Keep it simple and stupid"
+## "Keep it simple and stupid"
 
 ---
 
@@ -146,7 +146,7 @@ All sensors are replaceable
 # Simplify hardware
 
 ## 8bit AVR is slow (16MHz)
-## Output raw sensor values only
+## Raw sensor values
 ## No tunable parts
 
 ---
@@ -251,7 +251,7 @@ update() ->
 
 ---
 
-# Future directions:
+# Future directions
 
 ## Indoor/outdoor field testing
 ## Embedded Erlang node
