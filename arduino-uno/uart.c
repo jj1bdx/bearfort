@@ -51,19 +51,11 @@ uart_init(void)
 /*
  * Send character c down the UART Tx, wait until tx holding register
  * is empty.
+ * No editing needed.
  */
 int
 uart_putchar(char c, FILE *stream)
 {
-
-  if (c == '\a')
-    {
-      fputs("*ring*\n", stderr);
-      return 0;
-    }
-
-  if (c == '\n')
-    uart_putchar('\r', stream);
   loop_until_bit_is_set(UCSR0A, UDRE0);
   UDR0 = c;
 
