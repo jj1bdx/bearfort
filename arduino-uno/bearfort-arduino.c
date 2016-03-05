@@ -22,10 +22,11 @@
  * THE SOFTWARE.
  */
 /*
- * for hardware randomizer connected between
- * AIN1 (PD7, digital pin 7) and
- * AIN0 (PD6, digital pin 6)
- * of Arduino Duemilanove hardware (ATmega168)
+ * Bearfort sensor firmware
+ * for Arduino UNO R3 and
+ * Bearfort sensor shield
+ * (ADT7410 on TWI/I2C,
+ *  LM60 (or LM61) on ADC0 to ADC3 (four LM60s)
  * by Kenji Rikitake
  */
 
@@ -36,6 +37,7 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/eeprom.h>
 #include <util/delay.h>
 
 /* UART library */
@@ -58,6 +60,7 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 #define LM60TEMP(x) ((((double)x) * TC1 - 424.0) / 6.25)
 #define ADTTEMP(x) (((double)((int16_t)x)) / (double)128.0)
 
+uint16_t device_id;
 char buffer[8];
 
 /* initialize IO ports */
@@ -116,11 +119,6 @@ static void ioinit(void) {
     TCNT0 = 0;
     /* no external output, CTC */
     TCCR0A = 0x02;
-    /* timer period: 4 microseconds = 64 machine cycles */
-    OCR0A = (4*2) - 1;
-    /* clk/8 (0.5 microseconds / count) */
-    /* start timer */
-    TCCR0B = 0x02;
 
     /* Enable the ADC */
     /* ADC clock 1/128, interrupt disabled, no auto trigger */
@@ -143,8 +141,15 @@ static void ioinit(void) {
         i2c_stop();
     }
 
+    eeprom_busy_wait();
+
+    uint16_t address = 0;
+    /* little endian from address 0x00 */
+    device_id = eeprom_read_word((uint16_t *)address);
+
     /* enable interrupt after initialization*/
-    sei();
+    // disabled (unused)
+    // sei();
 }
 
 uint16_t adc_read(uint8_t adcx) {
@@ -188,9 +193,15 @@ int main() {
 
     int16_t adt0, a0, a1, a2, a3;
     int ch;
+    uint8_t *p;
 
     for (;;) {
+
         ch = getchar();
+        // 0x20 == " " (space)
+        // if not space, skip rest of code
+        if (ch != 0x20) continue;
+        // rest in for loop skipped if not space
 
         adt0 = (int16_t)get_ADT7410();
         a0 = adc_read(0);
@@ -198,27 +209,44 @@ int main() {
         a2 = adc_read(2);
         a3 = adc_read(3);
 
-        fputs("{ ", stdout);
-        itoa(adt0, buffer, 10);
-        fputs(buffer, stdout);
-        fputs(", ", stdout);
-        itoa(a0, buffer, 10);
-        fputs(buffer, stdout);
-        fputs(", ", stdout);
-        itoa(a1, buffer, 10);
-        dtostrf(a1, 6, 2, buffer);
-        fputs(buffer, stdout);
-        fputs(", ", stdout);
-        itoa(a2, buffer, 10);
-        fputs(buffer, stdout);
-        fputs(", ", stdout);
-        itoa(a3, buffer, 10);
-        fputs(buffer, stdout);
-        fputs("}.\n", stdout);
+        // 16 bytes in total
+        // 0x02 0x51 0x82
+        // device_id adt0 a0 a1 a2 a3 (little endian, 2-bytes each)
+        // 0x03 
+
+        fputc(0x02, stdout);
+        fputc(0x51, stdout);
+        fputc(0x82, stdout);
+
+        p = (uint8_t *)&device_id;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        p = (uint8_t *)&adt0;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        p = (uint8_t *)&a0;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        p = (uint8_t *)&a1;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        p = (uint8_t *)&a2;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        p = (uint8_t *)&a3;
+        fputc(*p++, stdout);
+        fputc(*p, stdout);
+
+        fputc(0x03, stdout);
+
         fflush(stdout);
     }
     /* NOTREACHED */
-    return 0;
 }
 
 /* end of code */
