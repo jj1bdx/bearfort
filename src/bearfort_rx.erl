@@ -26,11 +26,18 @@ test(N) ->
 
 test_1(_, 0) -> ok;
 test_1(FD, N) ->
-    do_test(FD),
+    {ok, Output} = do_test(FD),
+    io:format("~p~n", [Output]),
     test_1(FD, N-1).
 
-do_test(FD) ->
+read_serial(FD) ->
     ok = serctl:write(FD, <<32>>),
+    case serctl:readx(FD, 16, 500) of
+        {error, _} -> read_serial(FD);
+        {ok, Data} -> {ok, Data}
+    end.
+
+do_test(FD) ->
     {ok,
      <<2, 16#51, 16#82,
        DevId:2/little-unsigned-integer-unit:8,
@@ -39,5 +46,5 @@ do_test(FD) ->
        A1:2/little-unsigned-integer-unit:8,
        A2:2/little-unsigned-integer-unit:8,
        A3:2/little-unsigned-integer-unit:8,
-       3>>} = serctl:readx(FD, 16, 500),
-    {DevId, ADT0, A0, A1, A2, A3}.
+       3>>} = read_serial(FD),
+    {ok, {DevId, ADT0, A0, A1, A2, A3}}.
