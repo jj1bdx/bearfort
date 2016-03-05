@@ -52,6 +52,29 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 
 ---
 
+# Bearfort sensor shield
+
+## Temperature sensors
+## Analog Devices ADT7410 on TWI/I2C
+## 4 x Texas Instruments LM60s on ADC0-3
+
+All sensors are powered by +5V
+All sensors are replaceable
+
+![right,fit](bearfort-sensor-v2.jpg)
+
+---
+
+# What Bearfort shield can do?
+
+## Fault tolerant temperature sensing
+## 5 sensors
+## Robust against sensor failures
+
+![right,fit](bearfort-sensor-v2-annotated.jpg)
+
+---
+
 # Arduino Uno R3
 
 ## Atmel AVR ATmega328P
@@ -101,19 +124,6 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Solder - do not use breadboards
 ## Prepare for contact failures
 ## "Keep it simple and stupid"
-
----
-
-# Bearfort sensor shield
-
-## Temperature sensors
-## Analog Devices ADT7410 on TWI/I2C
-## 4 x Texas Instruments LM60s on ADC0-3
-
-All sensors are powered by +5V
-All sensors are replaceable
-
-![right,fit](bearfort-sensor-v2.jpg)
 
 ---
 
