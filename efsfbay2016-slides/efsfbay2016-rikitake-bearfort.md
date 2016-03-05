@@ -202,7 +202,8 @@ All sensors are replaceable
 # Dynamic update
 
 ## Updating Arduino from Erlang
-## Bootloader allows code loading
+## Use bootloader for code loading
+## Slow (5~10 seconds) but feasible
 
 ---
 
@@ -213,10 +214,11 @@ All sensors are replaceable
 
 ---
 
-# Unresolved issues
+# Issues
 
 ## Slow USB connection transition
-## 
+## Automated sensor calibration
+## Modeling fault tolerant operation
 
 ---
 
@@ -259,6 +261,14 @@ All sensors are replaceable
 
 ---
 
-# [fit] Thanks
+# Thanks to:
+
+## Michael Santos
+## Erlang Solutions
+## and you audience!
+
+---
+
+# [fit] Thank you
 
 # [fit] Questions?
