@@ -6,6 +6,8 @@ slidenumbers: true
 <!-- Use Deckset 1.6.0, Next theme, 16:9 aspect ratio -->
 <!-- target: 30 slides -->
 
+^ Good afternoon!
+
 ---
 
 # Kenji Rikitake
@@ -21,6 +23,8 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 
 ![right, fit](kenjiface-20150328-2.jpg)
 
+^ My name is Kenji Rikitake. This is my seventh talk on Erlang Factory in San Francisco.
+
 ---
 
 # Basic principles
@@ -29,6 +33,8 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 ## Simplify
 ## "Let It Crash"
 ## Update dynamically
+
+^ The basic principles on building fault tolerant systems are: keeping systems stabilized and simple for robustness. And don't be afraid of resetting or restarting the system. In other words, Let It Crash. The system should be able to be dynamically updated on demand, for minimizing the downtime.
 
 ---
 
@@ -39,6 +45,9 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 ## Wire protocols
 ## How Erlang talks with Arduino
 
+^ In this talk, I will explain the Bearfort system and sensors, a redundant temperature sensor system for Erlang/OTP. I will also talk about the basic design principles, including 8-bit Arduino basics, the wire protocols, and how Erlang can talk with Arduino.
+
+
 ---
 
 ![](bearfort-mountain.jpg)
@@ -47,6 +56,7 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 
 ![inline](bearfort-diagram.jpg)
 
+^ This is the diagram of Bearfort system. Each sensor, which is an Arduino shield, is made of 4 analog temperature sensors, LM60, and one digital temperature sensor, ADT7410. Each sensor is connected to BEAM host through USB serial links.
 
 [^1]: Bearfort = {BEam, ARduino, FORTified} / Bearfort ridge, NJ, USA / Background photo: By Zeete - Own work, CC BY-SA 4.0, <https://commons.wikimedia.org/w/index.php?curid=38798143>
 
@@ -63,6 +73,9 @@ All sensors are replaceable
 
 ![right,fit](bearfort-sensor-v2.jpg)
 
+^ This is the picture of Bearfort sensor shield. I made it by hand, soldered by myself.
+
+
 ---
 
 # What Bearfort shield can do?
@@ -72,6 +85,8 @@ All sensors are replaceable
 ## Robust against sensor failures
 
 ![right,fit](bearfort-sensor-v2-annotated.jpg)
+
+^ The top small board is the digital temperature sensor, and the bottom four transistor-like chips are the analog sensors. All sensors are operating independently.
 
 ---
 
@@ -87,6 +102,8 @@ Price: USD24.95[^2] as of March 2016 at SparkFun Electronics
 
 ![right,fit](Arduino_Uno_006.jpg)
 
+^ This is a picture of Arduino Uno R3. It's basically an AVR chip ATmega328p, with the power supply, USB serial interface, and external connectors. This small board is convenient for prototyping hardware development.
+
 ---
 
 # [fit] AVR development
@@ -94,6 +111,8 @@ Price: USD24.95[^2] as of March 2016 at SparkFun Electronics
 ## Write C event loop
 ## Try and error
 ## Interrupts are for timer only
+
+^ I'd like to talk about AVR development. The main toolchains for 8-bit AVRs are like the one in old MS-DOS days: GNU C compiler, assembler, program loader, and the library. You usually use interrupts for timers only; and lots of try-and-error attempts are needed.
 
 ---
 
@@ -108,6 +127,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ![right,fit](avrdragon-20080108-ppcable2.jpg)
 
+^ Using a chip programmer is essential to debug the firmware. This is a picture of AVR Dragon, an USB programmer. It can perform all necessary hardware configuration, from the protection bit configuration, to replicating the chips.
+
 ---
 
 # Hardware principles
@@ -115,6 +136,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Stabilize
 ## Simplify
 ## "Let It Crash"
+
+^ Now I'd like to talk about the principles on developing hardware for fault tolerant systems. First you need to make a stable hardware, and keep it simple. And the hardware should be capable to reset when something goes wrong.
 
 ---
 
@@ -124,6 +147,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Less contact points
 ## Prepare for contact failures
 
+^ I see a lot of examples for Arduino made on breadboards, but the contact pins and wires are fragile. I suggest soldering instead. Keeping the contact points minimum is also essential to prevent contact failures, though they will eventually happen, so you also need to prepare.
+
 ---
 
 # Contact failures
@@ -131,11 +156,16 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Open circuit
 ## Short circuit
 
+^ There are briefly two kinds of contact failures: open circuit, and short circuit. Open circuit means losing contact. Short circuit means two independent points are accidentally connected. Both cases may cause hardware malfunction.
+
 ---
 
 # Open circuit
 
 ![inline](open-circuit-failure.jpg)
+
+^ When two contacts are disconnected, the signal won't get through, and the circuit expecting the signal may receive an undefined state. For Bearfort shield, all analog sensor inputs are pulled down to the ground by resistors, so that the disconnection can be detected without halting the CPU.
+
 
 ---
 
