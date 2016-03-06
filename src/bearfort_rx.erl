@@ -3,7 +3,7 @@
 -export([open/0, close/1, do_test/1, test/1]).
 
 open() ->
-    {ok, FD} = serctl:open("/dev/cu.usbmodem1D11311"),
+    {ok, FD} = serctl:open("/dev/cu.usbmodem1421"),
     Termios = lists:foldl(
         fun(Fun, Acc) -> Fun(Acc) end,
         serctl:mode(raw),
@@ -37,6 +37,7 @@ test_1(_, 0) -> ok;
 test_1(FD, N) ->
     {ok, Output} = do_test(FD),
     {DevId, ADT0, A0, A1, A2, A3} = Output,
+    io:format("timestamp():~p~n", [os:timestamp()]),
     io:format("Device ID:~p~n", [DevId]),
     io:format("ADT7410 output:~p~n", [adt7410_convert(ADT0)]),
     io:format("LM60 values:~p~n", [[lm60_convert(V) || V <- [A0, A1, A2, A3]]]),
