@@ -1,0 +1,3 @@
+{application, bearfort,
+    [{description, "Bearfort sensor prototype"},
+    {vsn, "0.01"}]}.
