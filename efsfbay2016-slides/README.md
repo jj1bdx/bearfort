@@ -8,5 +8,6 @@
 
 ## Acknowledgments
 
+* [Michael Santos](https://github.com/msantos)
 * Erlang Solutions
-* EF crew: Francesco, Anna, Monika, Andra, Alison, and many other hard-working people
+* Erlang Factory crew: Francesco, Monika, Wioletta, Anna, Andra, Alison, and many other hard-working people of Erlang Solutions
