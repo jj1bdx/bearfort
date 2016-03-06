@@ -24,10 +24,23 @@ test(N) ->
     test_1(FD, N),
     ok = close(FD).
 
+%%% ((double)1.065) // 1.090/1023*1000
+-define(TC1, 1.065).
+
+adt7410_convert(V) ->
+    float(V) / 128.0.
+
+lm60_convert(V) ->
+    ((float(V) * ?TC1) - 424.0) / 6.25.
+
 test_1(_, 0) -> ok;
 test_1(FD, N) ->
     {ok, Output} = do_test(FD),
-    io:format("~p~n", [Output]),
+    {DevId, ADT0, A0, A1, A2, A3} = Output,
+    io:format("Device ID:~p~n", [DevId]),
+    io:format("ADT7410 output:~p~n", [adt7410_convert(ADT0)]),
+    io:format("LM60 values:~p~n", [[lm60_convert(V) || V <- [A0, A1, A2, A3]]]),
+    timer:sleep(500),
     test_1(FD, N-1).
 
 read_serial(FD) ->
