@@ -28,7 +28,7 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 ## Stabilize
 ## Simplify
 ## "Let It Crash"
-## Dynamic Update
+## Update dynamically
 
 ---
 
@@ -91,16 +91,15 @@ Price: USD24.95[^2] as of March 2016 at SparkFun Electronics
 
 # [fit] AVR development
 
-## Write C(++) and assembler
-## Event loop
+## Write C event loop
 ## Try and error
-## Interrupts: timer only
+## Interrupts are for timer only
 
 ---
 
 # Chip programmer
 
-## Essential for writing bootloader firmware
+## Essential for writing boot loader firmware
 ## Hardware diagnostics
 ## Hardware protection bit configuration
 ## Replicating chips
@@ -121,17 +120,16 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 # Stabilize hardware
 
-## Solder - do not use breadboards
+## Solder (no breadboard)
+## Less contact points
 ## Prepare for contact failures
-## "Keep it simple and stupid"
 
 ---
 
-# Contact failure modes
+# Contact failures
 
 ## Open circuit
 ## Short circuit
-## Intermittent failures
 
 ---
 
@@ -155,9 +153,9 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 # Simplify hardware
 
-## 8bit AVR is slow (16MHz)
-## Raw sensor values
-## No tunable parts
+## Keep firmware small
+## Return raw sensor values
+## Leave no tunable parts
 
 ---
 
@@ -193,7 +191,7 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ---
 
-# Simplify wire protocol
+# [fit] Simplify wire protocol
 
 ## Polling from host
 ## Fixed-length output
@@ -201,10 +199,18 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ---
 
+# Serial line protocol
+
+## [fit] No frame: synchronization needed
+## Fixed length = pattern matching
+## No tuning = idempotent
+
+---
+
 # Serial line control from Erlang/OTP
 
 ## Michael Santos' [srly](https://github.com/msantos/srly) package
-## [fit] Control tty line principles with ioctl()
+## TTY control (ioctl())
 ## Fixed-length reading function is *extremely* useful
 
 ---
@@ -237,15 +243,20 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Erlang does it *very well*
 ## Hardware reset control
 ## Serial ioctl-capable API
-## Idempotent code
 
 ---
 
-# Dynamic update
+# Update dynamically
 
 ## Updating Arduino from Erlang
-## Use bootloader for code loading
+## Use boot loader for code loading
 ## Slow (5~10 seconds) but feasible
+
+---
+
+# [fit] ATmega328p memory model
+
+![inline](arduino-memory-model.jpg)
 
 ---
 
@@ -293,10 +304,10 @@ update() ->
 
 * [Code and slides of this presentation](https://github.com/jj1bdx/bearfort/)
 * [srly](https://github.com/msantos/srly): Erlang NIF serial API
-* [stk500](https://github.com/msantos/stk500): Erlang AVR bootloader API
+* [stk500](https://github.com/msantos/stk500): Erlang AVR boot loader API
 * [avr-libc](http://savannah.nongnu.org/projects/avr-libc/), avr-binutils, avr-gcc
 * [avrdude](http://savannah.nongnu.org/projects/avrdude): AVR program loader
-* [optiboot](https://github.com/optiboot/optiboot/): AVR bootloader firmware 
+* [optiboot](https://github.com/optiboot/optiboot/): AVR boot loader firmware 
 
 ---
 
