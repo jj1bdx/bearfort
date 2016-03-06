@@ -34,7 +34,7 @@ Program Committee Member of ACM Erlang Workshop (2011, 2013, 2016) and CUFP 2016
 ## "Let It Crash"
 ## Update dynamically
 
-^ The basic principles on building fault tolerant systems are: keeping systems stabilized and simple for robustness. And don't be afraid of resetting or restarting the system. In other words, Let It Crash. The system should be able to be dynamically updated on demand, for minimizing the downtime.
+^ The basic principles on building fault tolerant systems are: keeping systems stabilized and simple for robustness. Don't be afraid of resetting or restarting the system. In other words, Let It Crash. The system should be able to be dynamically updated on demand, for minimizing the downtime.
 
 ---
 
@@ -137,7 +137,7 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Simplify
 ## "Let It Crash"
 
-^ Now I'd like to talk about the principles on developing hardware for fault tolerant systems. First you need to make a stable hardware, and keep it simple. And the hardware should be capable to reset when something goes wrong.
+^ Now I'd like to talk about the principles on developing hardware for fault tolerant systems. First you need to make a stable hardware, and keep it simple. The hardware should be capable to reset when something goes wrong.
 
 ---
 
@@ -166,18 +166,22 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ^ When two contacts are disconnected, the signal won't get through, and the circuit expecting the signal may receive an undefined state. For Bearfort shield, all analog sensor inputs are pulled down to the ground by resistors, so that the disconnection can be detected without halting the CPU.
 
-
 ---
 
 # LM60 open circuit failure
 
 ![inline](lm60-open-circuit.jpg)
 
+
+^ When an open contact failure occurs, the failure is hard to detect. The signal level observed by open inputs could be rapidly changing, or rather slowly changing as if the value are legitimate, which are not. Pulling down to the ground level prevents this confusion. 
+
 ---
 
 # Short circuit
 
 ![inline](short-circuit-failure.jpg)
+
+^ When a digital signal line accidentally makes a short circuit to the ground, signal transfer is no longer possible. In this example, the essential clock between the sensor and CPU cannot be transmitted by the short circuit, which may halt the system altogether. 
 
 ---
 
@@ -187,6 +191,9 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Return raw sensor values
 ## Leave no tunable parts
 
+^ Another principle on hardware design is to keep it simple. Don't try to do many things; AVR is slow, so keep the firmware code small. Let the output values be processed by host, so return the raw values. Also, tunable hardware parts such as variable resistors may easily fail, so don't use them if possible.
+
+
 ---
 
 # "Let It Crash"
@@ -194,6 +201,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Reset when hardware fails
 ## Allow external reset
 ## Use watchdog timer if needed
+
+^ Let It Crash on Erlang is easy, but on hardware, you should be able to reset it. Allowing external reset is required for restarting from Erlang. Use the watchdog timer to minimize the hardware halt detection for the mission-critical systems.
 
 ---
 
@@ -210,6 +219,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ```
 
 ## Yes, that's it!
+
+^ 
 
 ---
 
