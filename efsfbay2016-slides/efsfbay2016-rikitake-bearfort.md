@@ -202,7 +202,7 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Allow external reset
 ## Use watchdog timer if needed
 
-^ Let It Crash on Erlang is easy, but on hardware, you should be able to reset it. Allowing external reset is required for restarting from Erlang. Use the watchdog timer to minimize the hardware halt detection for the mission-critical systems.
+^ Let It Crash on Erlang is easy, but on hardware, you should be able to reset it. Allowing external reset is required for restarting from Erlang. Use the watchdog timer to minimize the hardware halt detection for fast failure detection.
 
 ---
 
@@ -220,7 +220,7 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 
 ## Yes, that's it!
 
-^ 
+^ Resetting Arduino from USB serial requires turning off and on of the DTR signal for a short time, such as 50 milliseconds. This example contains an Erlang example of resetting an Arduino, with srly (S R L Y) library of Michael santos.
 
 ---
 
@@ -230,6 +230,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## "Let It Crash"
 ## Dynamic update
 
+^ Now I'd like to talk about the software side of principles on communicating with Arduino. First you need to have a simply and robust wire protocol. You often need Erlang to reset Arduino so that you can "Let It Crash".  You also need to overwrite Arduino firmware for hot code swapping.
+
 ---
 
 # [fit] Simplify wire protocol
@@ -237,6 +239,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Polling from host
 ## Fixed-length output
 ## No tunable parts
+
+^ The wire protocol between Erlang host and Arduino should be simple as possible. Listening to the serial port consumes CPU power, so polling from the host is essential to minimize the CPU load.  Using fixed length output for Arduino is also effective, as well as minimizing the number of tuning parameters, for keeping the sensor system stable.
 
 ---
 
@@ -246,6 +250,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Fixed length = pattern matching
 ## No tuning = idempotent
 
+^ Serial ports have no data framing, so you should expect receiving data not from the beginning, but in the middle of a data frame. Synchronization by polling is effective to prevent missing the frames. Fixed length data frames are easy to decode by Erlang's pattern matching. Minimizing the tuning parameters also makes the sensor system idempotent, which means not affected by the hidden states.
+
 ---
 
 # Serial line control from Erlang/OTP
@@ -254,6 +260,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## TTY control (ioctl())
 ## Fixed-length reading function is *extremely* useful
 
+^ Michael Santos has released quite a few interesting Erlang libraries for communication, such as procket, for Ethernet. Srly (S R L Y) is implemented with the native interface functions or NIFs, so you can control the line disciplines in fine resolution. The library also has a fixed-length reading function with timeout, which is very useful on communication with Arduino.
+
 ---
 
 # Wire protocol message format
@@ -261,6 +269,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## 16-byte fixed length
 
 ![inline](bearfort-message-format.jpg)
+
+^ This diagram shows the wire protocol message format of the bearfort sensor. The sensor returns the 16-bit device ID, and all the five sensor values as 16-bit integers. The data is wrapped inside 3-byte start pattern and 1-byte end pattern, to prevent pattern matching failures.
 
 ---
 
@@ -277,6 +287,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
  3>>} = read_serial(FD). % 3 == ETX
 ```
 
+^ This is a piece of Erlang code to decode the data from the wire protocol. Since AVR uses the little endian for the internal data representation, the data is also transmitted in the little endian.
+
 ---
 
 # "Let It Crash"
@@ -284,6 +296,8 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Erlang does it *very well*
 ## Hardware reset control
 ## Serial ioctl-capable API
+
+^ The phrase "Let It Crash" is popular among the Erlang Community. Fred Hebert, the author of "Learn You Some Erlang for Great Good!", recently explains the phrase in his blog article The Zen of Erlang as a principle of "transforming failures, exceptions, and crashes into tools we can use". So it's all about how to control failures. On Arduino you don't have much choice; you need to reset the AVR chip, under Erlang's control.
 
 ---
 
@@ -293,11 +307,15 @@ Photo: [AVR Dragon](http://www.atmel.com/tools/AVRDRAGON.aspx), circa 2008
 ## Use boot loader for code loading
 ## Slow (5~10 seconds) but feasible
 
+^ Erlang allows hot code loading. You can update the code of a function without stopping the entire Erlang node. On Arduino it's not that easy, but you can rewrite the firmware code under Erlang's control and the boot loader's help. It takes 5 to 10 seconds, but it is indeed feasible and very useful on debugging the firmware.
+
 ---
 
 # [fit] ATmega328p memory model
 
 ![inline](arduino-memory-model.jpg)
+
+^ AVR separates code and data. All running code must be in the flash memory. The boot loader is protected to prevent overwriting itself. The boot loader can reprogram the flash code and the EEPROM as the persistent non-volatile storage, when being instructed from the host within one second after the reset sequence.
 
 ---
 
@@ -313,6 +331,9 @@ update() ->
                [{speed, b115200}]),
     ok = stk500:load(FD, Bytes).
 ```
+
+^ This is a piece of Erlang code for the dynamic update. It reads the firmware file as an Erlang term, break it into chunks of 128-byte length binaries and make them a list, open the communication channel for the boot loader, and initiate the flash code loading sequence. The protocol details are described in an AVR application note.
+
 ---
 
 # Issues
@@ -321,6 +342,8 @@ update() ->
 ## Automated sensor calibration
 ## Modeling fault tolerant operation
 
+^ I've explained how a sensor capable of fault-tolerant operation can be built, but there are still unresolved issues. USB communication disconnection is slow to detect. It takes about 10 seconds on a Mac Mini. Calibrating the sensors takes a lot of time too. You also need to choose how to deal with the detected faults, and evaluate the pros and cons.
+
 ---
 
 # Future directions
@@ -328,6 +351,8 @@ update() ->
 ## Indoor/outdoor field testing
 ## Embedded Erlang node
 ## Multiple sensors/nodes
+
+^ I've tested a Bearfort sensor outdoor when it isn't raining, but more rigorous field testing is certainly needed for verifying the reliability. I'd like to use the Raspberry Pi or other embedded computers which are capable to run Erlang for more sophisticated control. I need to pursue using multiple sensors and nodes simultaneously, though it's definitely not an easy task.
 
 ---
 
@@ -338,6 +363,8 @@ update() ->
 * Host OS device drivers
 * non-8bit Arduino boards
 * Erlang/ALE = for Raspeberry Pi
+
+^ In this talk, I intentionally excluded topics on TCP/IP related protocols, cryptographic security, and the host device drivers. This talk is about 8-bit AVR only, but the basic principles are applicable to other microcontrollers as well.
 
 ---
 
@@ -350,6 +377,8 @@ update() ->
 * [avrdude](http://savannah.nongnu.org/projects/avrdude): AVR program loader
 * [optiboot](https://github.com/optiboot/optiboot/): AVR boot loader firmware 
 
+^ (Talk briefly)
+
 ---
 
 # Related work (2/2)
@@ -360,6 +389,8 @@ update() ->
    * Robot running in Elixir
    * [elixirbot on GitHub](https://github.com/fhunleth/elixirbot)
 
+^ (Talk briefly)
+
 ---
 
 # Thanks to:
@@ -367,6 +398,8 @@ update() ->
 ## Michael Santos
 ## Erlang Solutions
 ## ...and you all!
+
+^ (Talk briefly)
 
 ---
 
