@@ -1,6 +1,7 @@
 -module(bearfort_rx).
 
--export([open/0, close/1, do_test/1, test/1]).
+-export([open/0, close/1, do_test/1, test/1,
+         adt7410_convert/1, lm60_convert/1]).
 
 open() ->
     {ok, FD} = serctl:open("/dev/cu.usbmodem1421"),
