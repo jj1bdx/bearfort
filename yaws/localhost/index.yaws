@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Beaufort sensor status</title>
+<style> .num { text-align: right; } </style>
+</head>
+<body>
+<h1>Beaufort sensor status</h1>
+<erl>
+out(_) ->
+    {ok, FD} = bearfort_rx:open(),
+    {ok, Output} = bearfort_rx:do_test(FD),
+    {DevId, ADT0, A0, A1, A2, A3} = Output,
+    bearfort_rx:close(FD),
+    {html, f("<p>Output: ~w</p>", [Output])}.
+</erl>
+</body>
+</html>
