@@ -13,7 +13,7 @@ open() ->
             fun(N) -> serctl:ospeed(N, b9600) end
         ]
     ),
-    ok = serctl:tcsetattr(FD, tcsanow, Termios),
+    ok = serctl:tcsetattr(FD, tcsaflush, Termios),
     {ok, FD}.
 
 close(FD) ->
