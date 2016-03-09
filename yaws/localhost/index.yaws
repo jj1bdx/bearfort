@@ -13,7 +13,34 @@ out(_) ->
     {ok, Output} = bearfort_rx:do_test(FD),
     {DevId, ADT0, A0, A1, A2, A3} = Output,
     bearfort_rx:close(FD),
-    {html, f("<p>Output: ~w</p>", [Output])}.
+    % {html, f("<p>Output: ~w</p>", [Output])}.
+    {ehtml, [
+      {p, [], f("Device ID: ~.10B", [DevId])},
+  	  {table, [{border, "1"}], [
+          {thead, [],
+            [{tr, [], [
+              {td, [], "Sensor name"}, {td, [], "Temperature"}
+              ]}]},
+          {tbody, [], [
+            {tr, [],
+                [{td, [], f("ADT7410", [])},
+                 {td, [], f("~.2f",
+                         [bearfort_rx:adt7410_convert(ADT0)])}]},
+            {tr, [],
+                [{td, [], f("LM60 #1", [])},
+                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A0)])}]},
+            {tr, [],
+                [{td, [], f("LM60 #2", [])},
+                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A1)])}]},
+            {tr, [],
+                [{td, [], f("LM60 #3", [])},
+                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A2)])}]},
+            {tr, [],
+                [{td, [], f("LM60 #4", [])},
+                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A3)])}]}
+          ]}    
+       ]}
+     ]}.
 </erl>
 </body>
 </html>
