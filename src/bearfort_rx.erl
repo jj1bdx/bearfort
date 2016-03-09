@@ -38,10 +38,12 @@ test_1(_, 0) -> ok;
 test_1(FD, N) ->
     {ok, Output} = do_test(FD),
     {DevId, ADT0, A0, A1, A2, A3} = Output,
-    io:format("timestamp():~p~n", [os:timestamp()]),
-    io:format("Device ID:~p~n", [DevId]),
-    io:format("ADT7410 output:~p~n", [adt7410_convert(ADT0)]),
-    io:format("LM60 values:~p~n", [[lm60_convert(V) || V <- [A0, A1, A2, A3]]]),
+    io:format("timestamp(): ~p~n", [os:timestamp()]),
+    io:format("Device ID: ~p~n", [DevId]),
+    io:format("ADT7410 output: ~.2f~n", [adt7410_convert(ADT0)]),
+    io:format("LM60 values: ~.2f ~.2f ~.2f ~.2f~n", 
+        [lm60_convert(A0), lm60_convert(A1),
+            lm60_convert(A2), lm60_convert(A3)]),
     timer:sleep(500),
     test_1(FD, N-1).
 
