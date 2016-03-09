@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Beaufort sensor status</title>
+<title>Bearfort sensor status</title>
 <style> .num { text-align: right; } </style>
 </head>
 <body>
-<h1>Beaufort sensor status</h1>
+<h1>Bearfort sensor status</h1>
 <erl>
 fault_adt7410(V) ->
     case V of
