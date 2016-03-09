@@ -8,6 +8,28 @@
 <body>
 <h1>Beaufort sensor status</h1>
 <erl>
+fault_adt7410(V) ->
+    case V of
+        -32768 -> {bgcolor, "red"};
+        _ -> {style, "color:black"}
+    end.
+
+fault_lm60(V) ->
+    if V < 10 -> {bgcolor, "red"};
+       true -> {style, "color:black"}
+    end.
+
+value_adt7410(V) ->
+    case V of
+        -32768 -> "FAULT";
+        _ -> io_lib:format("~.2f", [bearfort_rx:adt7410_convert(V)])
+    end.
+
+value_lm60(V) ->
+    if V < 10 -> "FAULT";
+       true -> io_lib:format("~.2f", [bearfort_rx:lm60_convert(V)])
+    end.
+
 out(_) ->
     {ok, FD} = bearfort_rx:open(),
     {ok, Output} = bearfort_rx:do_test(FD),
@@ -19,25 +41,29 @@ out(_) ->
   	  {table, [{border, "1"}], [
           {thead, [],
             [{tr, [], [
-              {td, [], "Sensor name"}, {td, [], "Temperature"}
+              {td, [], "Sensor name"}, {td, [], "Temp[&deg;C]"}
               ]}]},
           {tbody, [], [
             {tr, [],
                 [{td, [], f("ADT7410", [])},
-                 {td, [], f("~.2f",
-                         [bearfort_rx:adt7410_convert(ADT0)])}]},
+                    {td, [fault_adt7410(ADT0), {class, "num"}], 
+                         f("~s", [value_adt7410(ADT0)])}]},
             {tr, [],
                 [{td, [], f("LM60 #1", [])},
-                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A0)])}]},
+                    {td, [fault_lm60(A0), {class, "num"}], 
+                         f("~s", [value_lm60(A0)])}]},
             {tr, [],
                 [{td, [], f("LM60 #2", [])},
-                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A1)])}]},
+                    {td, [fault_lm60(A1), {class, "num"}], 
+                         f("~s", [value_lm60(A1)])}]},
             {tr, [],
                 [{td, [], f("LM60 #3", [])},
-                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A2)])}]},
+                    {td, [fault_lm60(A2), {class, "num"}], 
+                         f("~s", [value_lm60(A2)])}]},
             {tr, [],
                 [{td, [], f("LM60 #4", [])},
-                 {td, [], f("~.2f",[bearfort_rx:lm60_convert(A3)])}]}
+                    {td, [fault_lm60(A3), {class, "num"}], 
+                         f("~s", [value_lm60(A3)])}]}
           ]}    
        ]}
      ]}.
