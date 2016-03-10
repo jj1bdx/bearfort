@@ -1,7 +1,7 @@
 footer: Kenji Rikitake / ErLounge 10-MAR-2016
 slidenumbers: true
 
-<!-- Use Deckset 1.6.0, Firatheme, 16:9 aspect ratio -->
+<!-- Use Deckset 1.6.0, Fira theme, 16:9 aspect ratio -->
 
 # [fit] We Interrupt Your Regularly Scheduled Programming to Bring You
 # [fit] A Public Service Announcement
@@ -11,7 +11,7 @@ slidenumbers: true
 # [fit] Use *rand* module
 # now[^1]
 
-[^1]: Unless you stick to the older Erlang/OTP or Elixir versions from Erlang/OTP 18.x
+[^1]: Unless you stick to the older Erlang/OTP or Elixir versions before Erlang/OTP 18.x
 
 ---
 
@@ -33,7 +33,7 @@ slidenumbers: true
 # [fit] *random* module
 # now[^3]
 
-[^3]: Unless you stick to the older Erlang/OTP or Elixir versions from Erlang/OTP 18.x
+[^3]: Unless you stick to the older Erlang/OTP or Elixir versions before Erlang/OTP 18.x
 
 ---
 
@@ -54,7 +54,15 @@ slidenumbers: true
 # [fit] use *rand* module
 ## right now[^4]!
 
-[^4]: Unless you stick to the older Erlang/OTP or Elixir versions from Erlang/OTP 18.x
+[^4]: Unless you stick to the older Erlang/OTP or Elixir versions before Erlang/OTP 18.x
+
+---
+
+## [fit] random module will be
+#[fit] deprecated in OTP 19
+#[fit] removed from OTP 20
+
+(Officially announced by Kenneth Lundin on Erlang Factory SF Bay 2016 Day 1)
 
 ---
 
