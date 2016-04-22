@@ -49,7 +49,8 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 /* I2C library */
 
 #include <util/twi.h>
-#include "i2c_master.h"
+#include <alloca.h>
+#include "i2c.h"
 
 #define ADT7410_WRITE 0x90
 #define ADT7410_READ 0x91
@@ -63,16 +64,32 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 uint16_t device_id;
 char buffer[8];
 
+// Initialize ADT7410 via I2C
+
+void init_ADT7410(void) {
+
+    i2c_txn_t *t;
+    // 15-bit precision mode
+    uint8_t msg[] = {0x03, 0x80};
+
+    t = (i2c_txn_t *)alloca(sizeof(*t) + 2 * sizeof(t->ops[0]));
+    i2c_txn_init(t, 1);
+    // initialize ADT7410
+    i2c_op_init_wr(&t->ops[0], ADT7410_WRITE, msg, sizeof(msg));
+
+    i2c_post(t);
+    // Wait until completion of the transaction
+    while (!(t->flags & I2C_TXN_DONE)) {}
+}
+
 /* initialize IO ports */
+
 static void ioinit(void) {
 
-    /* disable interrupt before initialization*/
+    // disable interrupt before initialization
     cli();
 
-    /*
-     * forced initialization
-     * of unnecessary interrupts
-     */
+    // forced initialization of unnecessary interrupts
 
     MCUCR = 0x00;
     EICRA = 0x00;
@@ -86,19 +103,17 @@ static void ioinit(void) {
     PCICR = 0x00;
     PRR = 0x00;
 
-    /*
-     * TXD/PD1/Pin 1 to output
-     * RXD/PD0/Pin 0 to input 
-     */
+    // TXD/PD1/Pin 1 to output
+    // RXD/PD0/Pin 0 to input 
 
     DDRD = 0xfe;
     PORTD = 0xff;
 
-    /* PCx all input, no pullup */
+    // PCx all input, no pullup
     DDRC = 0x00;
     PORTC = 0x00;
 
-    /* PB5 = LED on Arduino 2009 */
+    // PB5 = LED on Arduino 2009
     DDRB = 0xff;
     PORTB = 0x3f;
 
@@ -131,25 +146,22 @@ static void ioinit(void) {
 
     ADCSRA |= _BV(ADEN);
 
-    /* initialize I2C */
-    i2c_init();
-    /* initialize ADT7410 */
-    if(!i2c_start(ADT7410_WRITE) &&
-       !i2c_write(0x03) &&
-       // 15-bit precision mode
-       !i2c_write(0x80)) {
-        i2c_stop();
-    }
-
+    /* Read device ID from EEPROM */
     eeprom_busy_wait();
 
     uint16_t address = 0;
     /* little endian from address 0x00 */
     device_id = eeprom_read_word((uint16_t *)address);
 
-    /* enable interrupt after initialization*/
-    // disabled (unused)
-    // sei();
+    /* enable interrupt for avr-i2c library */
+    sei();
+
+    /* initialize I2C */
+    i2c_init();
+
+    // initialize ADT7410
+    init_ADT7410();
+
 }
 
 uint16_t adc_read(uint8_t adcx) {
@@ -163,20 +175,28 @@ uint16_t adc_read(uint8_t adcx) {
     return ADC;
 }
 
-uint16_t get_ADT7410(void){
+uint16_t get_ADT7410(void) {
 
+    i2c_txn_t *t;
 	uint16_t temp = 0x8000;
+    uint8_t msg[] = {0x00};
+    uint8_t tempbytes[2];
     
-    // temperature register
-    if(!i2c_start(ADT7410_WRITE) &&
-       !i2c_write(0x00)) {
-        i2c_stop();
-    }
+    t = (i2c_txn_t *)alloca(sizeof(*t) + 2 * sizeof(t->ops[0]));
+    i2c_txn_init(t, 2);
+    // Read from temperature registers
+    i2c_op_init_wr(&t->ops[0], ADT7410_WRITE, msg, sizeof(msg));
+    i2c_op_init_rd(&t->ops[1], ADT7410_READ, tempbytes, sizeof(tempbytes));
 
-    if(!i2c_start(ADT7410_READ)) {
-        temp = ((uint8_t)i2c_read_ack() << 8);
-        temp |= ((uint8_t)i2c_read_nack());
-        i2c_stop();
+    i2c_post(t);
+    // Wait until completion of the transaction
+    while (!(t->flags & I2C_TXN_DONE)) {}
+
+    if (t->flags & I2C_TXN_ERR) {
+        // error
+        temp = 0x8000;
+    } else {
+        temp = (tempbytes[0] << 8) | tempbytes[1];
     }
 
     return temp;
