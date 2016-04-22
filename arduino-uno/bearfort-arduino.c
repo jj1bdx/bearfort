@@ -52,8 +52,7 @@ FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, uart_getchar, _FDEV_SETUP_RW);
 #include <alloca.h>
 #include "i2c.h"
 
-#define ADT7410_WRITE 0x90
-#define ADT7410_READ 0x91
+#define ADT7410_ADDRESS 0x48
 
 /* temperature macros */
 
@@ -75,7 +74,7 @@ void init_ADT7410(void) {
     t = (i2c_txn_t *)alloca(sizeof(*t) + 2 * sizeof(t->ops[0]));
     i2c_txn_init(t, 1);
     // initialize ADT7410
-    i2c_op_init_wr(&t->ops[0], ADT7410_WRITE, msg, sizeof(msg));
+    i2c_op_init_wr(&t->ops[0], ADT7410_ADDRESS , msg, sizeof(msg));
 
     i2c_post(t);
     // Wait until completion of the transaction
@@ -185,8 +184,8 @@ uint16_t get_ADT7410(void) {
     t = (i2c_txn_t *)alloca(sizeof(*t) + 2 * sizeof(t->ops[0]));
     i2c_txn_init(t, 2);
     // Read from temperature registers
-    i2c_op_init_wr(&t->ops[0], ADT7410_WRITE, msg, sizeof(msg));
-    i2c_op_init_rd(&t->ops[1], ADT7410_READ, tempbytes, sizeof(tempbytes));
+    i2c_op_init_wr(&t->ops[0], ADT7410_ADDRESS, msg, sizeof(msg));
+    i2c_op_init_rd(&t->ops[1], ADT7410_ADDRESS, tempbytes, sizeof(tempbytes));
 
     i2c_post(t);
     // Wait until completion of the transaction
