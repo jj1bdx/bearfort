@@ -4,7 +4,7 @@
          adt7410_convert/1, lm60_convert/1]).
 
 open() ->
-    {ok, FD} = serctl:open("/dev/cu.usbmodem1421"),
+    {ok, FD} = serctl:open("/dev/cu.usbmodem141141"),
     Termios = lists:foldl(
         fun(Fun, Acc) -> Fun(Acc) end,
         serctl:mode(raw),
