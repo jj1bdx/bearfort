@@ -30,7 +30,7 @@ HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
 HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 ## Objects that must be built in order to link
-OBJECTS = bearfort-arduino.o uart.o i2c_master.o
+OBJECTS = bearfort-arduino.o uart.o i2c.o
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
